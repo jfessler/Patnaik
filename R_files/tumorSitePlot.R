@@ -24,11 +24,14 @@ for (row in 1:nrow(tumorFreq)){
 tumorFreq = ddply(tumorFreq, .(temp), transform, pos = (cumsum(percent) - 0.5 * percent))
 tumorFreq$label = paste0(round(tumorFreq$percent*100), "%")
 
-p <- ggplot(tumorFreq, aes(factor(temp), y = percent, fill = Tumor.Site)) +          
+newp <- ggplot(tumorFreq, aes(factor(temp), y = percent, fill = Tumor.Site)) +          
       geom_bar(stat = "identity") + scale_y_continuous() +
-      ggtitle(paste0("# Cold = ",numCold," # Hot = ",numHot))
+      ggtitle(paste0("Metastatic Site: # Cold = ",numCold," # Hot = ",numHot))
       
-p <- p+ geom_text( aes(x = temp, y = pos, label = label), size = 4)
-p <- p + geom_text( aes(x = temp, y = pos + .03, label = freq), size = 2)
+newp <- newp + geom_text( aes(x = temp, y = pos, label = label), size = 4)
+newp <- newp + geom_text( aes(x = temp, y = pos + .03, label = freq), size = 3)
 
+jpeg(paste0(folder,"/metastaticSites.jpg"))
+plot(newp)
+dev.off()
 

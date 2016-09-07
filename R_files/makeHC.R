@@ -2,13 +2,13 @@ library(ConsensusClusterPlus)
 library(gplots)
 library(LPE)
 library(plyr)
-library(dplyr)
+#library(dplyr)
 library(RColorBrewer)
 
 selection_method <- "polyA" # or "hybrid"
 
-setwd("~/Documents/fessler/prostate_bioinformatics/")
-RNAseq_exp <- read.table("dv_prostate_RNAseq_exp.csv", sep = ',', header = TRUE)
+setwd("~/Patnaik/Patnaik/")
+RNAseq_exp <- read.table("../dv_RNAseq_data_exp.csv", sep = ',', header = TRUE)
 mets_exp <- RNAseq_exp[,32:129] #mets
 
 mets_t <- as.data.frame(t(mets_exp))
@@ -59,7 +59,8 @@ rm(RNAseq_exp)
 d <- scale(mets_clean, scale = FALSE) # scale columns
 d <- t(scale(t(d), scale = FALSE)) # scale rows
 
-jpeg(filename = "scaleF_polyA_mets_823.jpg")
+
+jpeg(filename = paste0("resultImages/",selection_method,"_mets_",Sys.Date(),".jpg"))
 ## Generate heatmap
 hm <- heatmap.2(d, Rowv = TRUE, Colv = TRUE,
                 trace = "none",

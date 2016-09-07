@@ -1,10 +1,10 @@
 library(ggplot2)
 library(grid)
 library(plyr)
-library(dplyr)
-setwd("~/Documents/fessler/prostate_bioinformatics/")
 
+#############################################
 PIK3CA_CN_upperLim <- 8
+#############################################
 
 id_tab <- read.table("ID_key.csv", header = TRUE, stringsAsFactors = FALSE, 
                      sep = ",")#row.names = "SRR_ID")
@@ -43,7 +43,7 @@ cn_table <- cn_table[,c("temp","cn_PTEN","cn_PIK3CA")]
 
 #browser()
 allData <- transform(merge(cn_table, mut_table, by = 0), row.names=Row.names, Row.names=NULL)
-freqTable <- count(allData,vars = colnames(allData))
+freqTable <- plyr::count(allData,vars = colnames(allData))
 
 for (col in colnames(freqTable[2:(ncol(freqTable)-2)])){
   if (sum(freqTable[[col]]) == 0){freqTable[[col]] <- NULL}
@@ -129,8 +129,9 @@ freqTable$label = paste0(round(freqTable$percent*100), "%")
 p <- ggplot(freqTable, aes(factor(temp), y = percent, fill = Name)) +
   geom_bar(stat = "identity") 
 
-p <- p + labs(title = paste0("K=",cut_k,", cc=",cc_k,", cold:",coldClus," hot:",hotClus,"\n",
-          "# Cold = ",numCold," # Hot = ",numHot)) + 
+TITLE <- paste0("K=",cut_k,", cc=",cc_k,", cold:",coldClus," hot:",hotClus,"\n",
+                "# Cold = ",numCold," # Hot = ",numHot)
+p <- p + labs(title = TITLE) + 
   theme(plot.title = element_text(hjust = 0.5))
   
 p <- p+ geom_text( aes(x = temp, y = pos, label = label), size = 4)
@@ -140,6 +141,13 @@ totals$t_label<- paste0(round(totals$total*100), "%")
 
 p <- p + geom_text(aes(temp, total + .02, label = t_label, fill = NULL), data = totals)
 
-##t <- grobTree(textGrob(paste(resultsList, collapse = ','), gp = gpar(fontsize = 8)))
+jpeg(paste0(folder,"/",cut_k,"_cc",cc_k,"_Cold",coldClus,"-Hot",hotClus,".jpg"))
+plot(p)
+dev.off()
 
-beep()
+sink(file  = paste0(folder,"/pvalueResults.txt"))
+print(resultsList)
+sink()
+
+source('R_files/tumorSitePlot.R')
+

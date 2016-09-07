@@ -1,15 +1,18 @@
 if(exists("hc") == FALSE){
-  source("makeHC.R")
+  source("R_files/makeHC.R")
   }
 
 library(randomcoloR)
 library(beepr)
 
+####################################################################
 cut_k <<- 500
 cc_k <<- 13
 
 coldClus <<- 6
 hotClus <<- 3
+####################################################################
+
 
 cutree.cut <- function(K){
   # K-Means Cluster Analysis
@@ -43,7 +46,7 @@ tcellCusters.pick <- function(k, cluster_map){
 }
 
 genCC <- function(k,myclusters){
-  folder <<- paste0("k",k,"_",
+  folder <<- paste0("resultImages/k",k,"_",
                     format(Sys.time(),"%m-%e-%y_%H%M"))
   results = ConsensusClusterPlus(as.matrix(myclusters),
                                  maxK = 20, reps = 2000, 
@@ -174,6 +177,6 @@ for (k_num in c(cut_k)){
   plotCC(k_init = k_num, results = RESULTS, myclusters = MY_CLUS, cluster_map = CLUS_MAP)
 }
 
-source('~/Documents/fessler/prostate_bioinformatics/hotCold_CNVmutAnalysis_826.R')
+source('R_files/hotCold_CNVmutAnalysis_826.R')
 
 beep()
