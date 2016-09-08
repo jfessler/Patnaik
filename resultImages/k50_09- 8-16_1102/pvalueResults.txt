@@ -1,0 +1,15 @@
+[[1]]
+[1] "cn_PTEN: 0.292"
+
+[[2]]
+[1] "mut_PIK3CA: 0.353"
+
+[[3]]
+[1] "mut_PIK3CB: 1"
+
+[[4]]
+[1] "mut_PTEN: 1"
+
+[[5]]
+[1] "For all activating mutations, p-value=0.292"
+
